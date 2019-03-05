@@ -29,11 +29,12 @@ def printGame(game):
     for row in game:
         print(row)
 
-def runGame(game):
+def runGame(game): # This is where the game is run from
     active = True
     while(active):
         (col, player, nextTurn) = game.whosTurn(player1, player2)
-        game.addMove(col, player)
+        active = game.addMove(col, player)
+        game.printGame()
         player.state = False
         nextTurn.state = True
         

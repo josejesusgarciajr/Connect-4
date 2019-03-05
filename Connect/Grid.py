@@ -39,6 +39,10 @@ class Grid:
 
         if notFull:
             self.matrix[column][row] = player.color # if Not FUll (ADD TO COLUMN)
+            if self.checkVertical(player, column, row):
+                return False  # returning false will end the loop because player won
+            else:
+                return True # returning true will let the game run
         else:
             notValidEntry = True                # if column is full
             while notValidEntry:
@@ -47,8 +51,11 @@ class Grid:
                                      
                 if validEntry:                  #enters a valid column (COLUMN THAT IS NOT FULL)
                     self.matrix[column][row] = player.color
+                    if self.checkVertical(player, column, row):     # if Not FULL (ADD TO COLUMN)
+                        return False    # returning false will end the game
+                    else:
+                        return True     # returning true will let the game run
                     notValidEntry = False
-        printGame(self.matrix)
     
     def whosTurn(self, player1, player2):   # checks whos turn it is
         if player1.state == True:           
@@ -86,9 +93,25 @@ class Grid:
         if column <= 6 and column >= 0:     # simply checks if the column is in range
             return True                 # (1 - 7)
         return False
+    
+    def checkVertical(self, player, column, row):   # checks the vertical for a win
+        match = 0       # initalize number of matches to 0
+        
+        for checkUp in range(row, 6, 1):
+            if self.matrix[column][checkUp] == player.color:
+                match += 1          # incement matches by one if match found
+                print("matches: " + str(match))
+            if match == 4:      # if 4 consecutive matches, That player wins
+                return True
+            else:                       # if not a consecutive match, then not a win
+                if self.matrix[column][checkUp] != player.color:
+                    return False
+        print("returning false")
+        return False
+    
+    def printGame(self):
+        for row in self.matrix:
+            print(row)
  
-def printGame(game):
-    for row in game:
-        print(row)
 
 
