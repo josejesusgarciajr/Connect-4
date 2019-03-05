@@ -12,16 +12,29 @@ class Terminal:
         self.player1 = player1
         self.player2 = player2
         
-player1 = raw_input("Player 1, plz enter your Name: ")
+name = raw_input("Player 1, plz enter your Name: ")
 color_one = raw_input("Player 1, choose your color: ")
 
-player_one = Player(player1, color_one, 0, True)
+player1 = Player(name, color_one, 0, True)
 
-player2= raw_input("Player 2, plz enter your Name: ")
+name2= raw_input("Player 2, plz enter your Name: ")
 color_two = raw_input("Player 2, choose your color: ")
 
-player_two = Player(player2, color_two, 0, False)
+player2 = Player(name2, color_two, 0, False)
 
-game = Grid(6, 7, player1, player2)
+Matrix = [[0 for x in range(6)] for y in range(7)]
+game = Grid(player1, player2, Matrix)
 
-game.run()
+def printGame(game):
+    for row in game:
+        print(row)
+
+def runGame(game):
+    active = True
+    while(active):
+        (col, player, nextTurn) = game.whosTurn(player1, player2)
+        game.addMove(col, player)
+        player.state = False
+        nextTurn.state = True
+        
+runGame(game)

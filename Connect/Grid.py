@@ -5,34 +5,32 @@ Created on Mar 4, 2019
 '''        
 
 from Player import Player
+from inspect import stack
    
 class Grid:
-    def __init__(self, rows, columns, player1, player2):
-        self.rows = rows
-        self.colums = columns
+    def __init__(self, player1, player2, matrix):
         self.player1 = player1
         self.player2 = player2
-        self.matrix = setGrid(rows, columns)
+        self.matrix = matrix
+        
+    def addMove(self, column, player):
+        row = len(self.matrix[column]) - 1
+        print("LENGHT OF COLUMN: " + str(row))
+        while(self.matrix[column][row] != 0):
+            row -= 1
+        self.matrix[column][row] = player.color
+        printGame(self.matrix)
     
-    def run(self):
-        active = True
-        while(active):
-            whosTurn(self.player1, self.player2)
-            
-            
-
-def whosTurn(player_one, player_two):
-    if player_one == True:
-        slot = input("Which Column Player 1?")
-    else:
-        slot = input("Which Column Player 2?")
-def setGrid(rows, columns):
-    Matrix = [["-" for x in range(columns)] for y in range(rows)] 
-    return Matrix
-    
+    def whosTurn(self, player1, player2):
+        if player1.state == True:
+            col = input("Which Column Player 1?")
+            return (col -1), player1, player2
+        else:
+            col = input("Which Column Player 2?")
+            return (col - 1), player2, player1
+ 
 def printGame(game):
-    for row in game.matrix:
+    for row in game:
         print(row)
 
-print("CONNECT 4")
 
