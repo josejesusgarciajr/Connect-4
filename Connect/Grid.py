@@ -3,19 +3,21 @@ Created on Mar 4, 2019
 
 @author: jginvincible
 '''        
-from Terminal import Terminal
+
 from Player import Player
    
 class Grid:
-    def __init__(self, rows, columns):
+    def __init__(self, rows, columns, player1, player2):
         self.rows = rows
         self.colums = columns
+        self.player1 = player1
+        self.player2 = player2
         self.matrix = setGrid(rows, columns)
     
     def run(self):
         active = True
         while(active):
-            slot = whosTurn(Terminal.p_one_name, Terminal.player_two)
+            whosTurn(self.player1, self.player2)
             
             
 
@@ -32,6 +34,5 @@ def printGame(game):
     for row in game.matrix:
         print(row)
 
-game = Grid(6,7)
 print("CONNECT 4")
-printGame(game)
+
