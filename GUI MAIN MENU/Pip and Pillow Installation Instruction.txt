@@ -1,0 +1,8 @@
+In order to use the PIL import in the GUI_Main.py module, you will need to install pip and Pillow.
+If you have Python version 3+ you only need to install Pillow (pip is already installed by default)
+
+PIP INSTALLATION:
+https://pip.pypa.io/en/stable/installing/
+
+PILLOW INSTALLATION:
+https://pillow.readthedocs.io/en/5.2.x/installation.html
