@@ -39,7 +39,7 @@ class Grid:
 
         if notFull:
             self.matrix[column][row] = player.color # if Not FUll (ADD TO COLUMN)
-            if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row):
+            if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):
                 return False, player  # returning false will end the loop because player won
             else:
                 return True, None # returning true will let the game run
@@ -51,7 +51,7 @@ class Grid:
                                      
                 if validEntry:                  #enters a valid column (COLUMN THAT IS NOT FULL)
                     self.matrix[column][row] = player.color
-                    if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row):     # if Not FULL (ADD TO COLUMN)
+                    if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):     # if Not FULL (ADD TO COLUMN)
                         return False, player    # returning false will end the game
                     else:
                         return True, None    # returning true will let the game run
@@ -94,6 +94,11 @@ class Grid:
             return True                 # (1 - 7)
         return False
     
+    def rowInRange(self, row):
+        if row <= 5 and row >= 0:
+            return True
+        return False
+    
     def checkVertical(self, player, column, row):   # checks vertical for a win
         match = 0       # initalize number of matches to 0
         
@@ -101,6 +106,7 @@ class Grid:
             if self.matrix[column][checkUp] == player.color:
                 match += 1          # incement matches by one if match found
             if match == 4:      # if 4 consecutive matches, That player wins
+                print("VERTICAL WIN")
                 return True
             else:                       # if not a consecutive match, then not a win
                 if self.matrix[column][checkUp] != player.color:
@@ -116,6 +122,7 @@ class Grid:
                 if self.matrix[checkUp][row] == player.color:
                     match += 1
                 if match == 4:          # if 4 matches found, return True for win
+                    print("HORIZONTAL WIN")
                     return True
                 if self.matrix[checkUp][row] != player.color or checkUp == -1: # stops loop when no match is reached
                     break
@@ -127,16 +134,72 @@ class Grid:
                 if self.matrix[checkUp][row] == player.color:   # checks to the left
                     match += 1
                 if match == 4:      # if the combined matches from the left add up to 4
+                    print("HORIZONTAL WIN")
                     return True         # return True for win
                 if self.matrix[checkUp][row] != player.color:
                     break           # if no match, and match < 4, stop searching
             else:
                 return False
         return False
+    
+    def checkDiagonals(self, player, column, row):
+        #initialize match to 0
+        match = 0
+
+        for checkUp in range(4):        # first Two loops check one diagonal
+                                # LOOP ONE CHECKS (FROM slot to upper left)
+            if self.inRange(column + checkUp) and self.rowInRange(row - checkUp):
+                if self.matrix[column + checkUp][row - checkUp] == player.color:
+                    match += 1                      # if match, increment
+                    if match == 4:              # if 4 matches, return true for the win
+                        return True
+                else:
+                    break           # break loop because no match to player
+            else:
+                break           # break because out of range
+                 
+        for checkDown in range(3):  # LOOP TWO IS A CONTINUATION OF THE FIRST DIAGONAL
+                                            # (from slot to lower right)
+            if self.inRange(column - checkDown - 1) and self.rowInRange(row + checkDown + 1):
+                if self.matrix[column - checkDown - 1][row + checkDown + 1] == player.color:
+                    match +=1
+                    if match == 4:
+                        return True
+                else:
+                    break       # break because no match
+            else:
+                break           # break because not in range
+        
+        # reset match to 0 because no first diagonal was not a win, checking for other diagonal
+        match = 0
+        
+        # First loop of second diagonal will check from (slot to upper right)
+        
+        for checkUp in range(4):
+            if self.inRange(column - checkUp) and self.rowInRange(row - checkUp):
+                if self.matrix[column - checkUp][row - checkUp] == player.color:
+                    match += 1
+                    if match == 4:
+                        return True
+                else:
+                    break       # break because not match
+            else:
+                break           # break because out of range
             
+        # Second loop of second diagonal will check (slot + 1 to lower left)
+        
+        for checkDown in range(3):
+            if self.inRange(column + checkDown + 1) and self.rowInRange(row + checkDown + 1):
+                if self.matrix[column + checkDown + 1][row + checkDown + 1] == player.color:
+                    match += 1
+                    if match == 4:
+                        return True     # Return true for the win
+                else:
+                    break           # break because no longer a match
+            else:
+                break           # break because out of range
+        return False
+    
     def printGame(self):
         for row in self.matrix:
             print(row)
- 
-
-
