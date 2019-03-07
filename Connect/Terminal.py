@@ -33,7 +33,9 @@ def runGame(game): # This is where the game is run from
     active = True
     while(active):
         (col, player, nextTurn) = game.whosTurn(player1, player2)
-        active = game.addMove(col, player)
+        active, winner = game.addMove(col, player)
+        if active == False:
+            print(winner.name + " WON!")
         game.printGame()
         player.state = False
         nextTurn.state = True

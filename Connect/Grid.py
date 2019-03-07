@@ -39,10 +39,10 @@ class Grid:
 
         if notFull:
             self.matrix[column][row] = player.color # if Not FUll (ADD TO COLUMN)
-            if self.checkVertical(player, column, row):
-                return False  # returning false will end the loop because player won
+            if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row):
+                return False, player  # returning false will end the loop because player won
             else:
-                return True # returning true will let the game run
+                return True, None # returning true will let the game run
         else:
             notValidEntry = True                # if column is full
             while notValidEntry:
@@ -51,10 +51,10 @@ class Grid:
                                      
                 if validEntry:                  #enters a valid column (COLUMN THAT IS NOT FULL)
                     self.matrix[column][row] = player.color
-                    if self.checkVertical(player, column, row):     # if Not FULL (ADD TO COLUMN)
-                        return False    # returning false will end the game
+                    if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row):     # if Not FULL (ADD TO COLUMN)
+                        return False, player    # returning false will end the game
                     else:
-                        return True     # returning true will let the game run
+                        return True, None    # returning true will let the game run
                     notValidEntry = False
     
     def whosTurn(self, player1, player2):   # checks whos turn it is
@@ -94,13 +94,12 @@ class Grid:
             return True                 # (1 - 7)
         return False
     
-    def checkVertical(self, player, column, row):   # checks the vertical for a win
+    def checkVertical(self, player, column, row):   # checks vertical for a win
         match = 0       # initalize number of matches to 0
         
         for checkUp in range(row, 6, 1):
             if self.matrix[column][checkUp] == player.color:
                 match += 1          # incement matches by one if match found
-                print("matches: " + str(match))
             if match == 4:      # if 4 consecutive matches, That player wins
                 return True
             else:                       # if not a consecutive match, then not a win
@@ -109,6 +108,32 @@ class Grid:
         print("returning false")
         return False
     
+    def checkHorizontal(self, player, column, row):  # checks horizontal for a win
+ 
+        match = 0
+        for checkUp in range(column, (column - 4), -1):  # FIRST LOOP checks to the right
+            if self.inRange(checkUp):
+                if self.matrix[checkUp][row] == player.color:
+                    match += 1
+                if match == 4:          # if 4 matches found, return True for win
+                    return True
+                if self.matrix[checkUp][row] != player.color or checkUp == -1: # stops loop when no match is reached
+                    break
+            else:
+                break
+   
+        for checkUp in range((column + 1), (column + 4)):   # SECOND LOOP 
+            if self.inRange(checkUp):
+                if self.matrix[checkUp][row] == player.color:   # checks to the left
+                    match += 1
+                if match == 4:      # if the combined matches from the left add up to 4
+                    return True         # return True for win
+                if self.matrix[checkUp][row] != player.color:
+                    break           # if no match, and match < 4, stop searching
+            else:
+                return False
+        return False
+            
     def printGame(self):
         for row in self.matrix:
             print(row)
