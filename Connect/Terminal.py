@@ -37,6 +37,9 @@ def runGame(game): # This is where the game is run from
         if active == False:
             print(winner.name + " WON!")
         game.printGame()
+        if game.checkForDraw():
+            print("DRAW!")
+            break
         player.state = False
         nextTurn.state = True
         

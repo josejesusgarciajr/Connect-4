@@ -16,6 +16,7 @@ class Grid:
         
     def addMove(self, column, player): # Add's a move if valid
         row = 1
+        
         if self.inRange(column):            # First check if the column is in range ( 1 - 7)
             row = len(self.matrix[column]) - 1  # If it is, then get the number of rows to check
         else:
@@ -199,6 +200,14 @@ class Grid:
             else:
                 break           # break because out of range
         return False
+    
+    def checkForDraw(self):
+        print("CHECKING FOR A DRAW")
+        for row in self.matrix:
+            for slot in row:
+                if slot == 0:
+                    return False     # returning false means no draw
+        return True            # returning true results in a draw
     
     def printGame(self):
         for row in self.matrix:
