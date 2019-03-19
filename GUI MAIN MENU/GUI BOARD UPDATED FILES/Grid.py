@@ -39,23 +39,26 @@ class Grid:
         if notFull:
             self.matrix[column][row] = player.color # if Not FUll (ADD TO COLUMN)
             if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):
-                return False, player  # returning false will end the loop because player won
+                return False, player, row  # returning false will end the loop because player won
             else:
                 return True, None, row # returning true will let the game run
         else:
+            # COMMENTED THIS OUT BECAUSE WHILE LOOP CAUSES GUI TO CRASH
+            # IN GUI -> IF THE ROW IS 0 I REMOVE THE TRIANGLE BUTTON SO USERS CANNOT CLICK A FILLED ROW, SO NO VALIDATION NEEDED HERE
             notValidEntry = True                # if column is full
-            while notValidEntry:
-                column = input(player.name + " choose a column that is not full: ") - 1
-                validEntry, row, column = self.columnNotFull(column)  # continue to ask until user
-                                     
-                if validEntry:                  #enters a valid column (COLUMN THAT IS NOT FULL)
-                    self.matrix[column][row] = player.color
-                    if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):     # if Not FULL (ADD TO COLUMN)
-                        return False, player    # returning false will end the game
-                    else:
-                        return True, None, row    # returning true will let the game run
-                    notValidEntry = False
+#             while notValidEntry:
+#                 column = input(player.name + " choose a column that is not full: ") - 1
+#                 validEntry, row, column = self.columnNotFull(column)  # continue to ask until user
+#                                      
+#                 if validEntry:                  #enters a valid column (COLUMN THAT IS NOT FULL)
+#                     self.matrix[column][row] = player.color
+#                     if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):     # if Not FULL (ADD TO COLUMN)
+#                         return False, player, row    # returning false will end the game
+#                     else:
+#                         return True, None, row    # returning true will let the game run
+#                     notValidEntry = False
     
+    # I DO NOT USE THIS METHOD BECAUSE I TAKE USER INPUT THROUGH TRIANGLE BUTTON CLICK
     def whosTurn(self, player1, player2):   # checks whos turn it is
         if player1.state == True:           
             col = input("Which Column Player 1?")

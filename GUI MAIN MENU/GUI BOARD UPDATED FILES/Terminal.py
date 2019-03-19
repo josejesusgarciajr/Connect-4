@@ -3,7 +3,7 @@ Created on Mar 4, 2019
 
 @author: jginvincible
 '''
-
+# MODULE NOT NEEDED -> GAME RUNS IN GUI
 from Connect.Player import Player
 from Connect.Grid import Grid
 from pip._vendor.distlib.compat import raw_input
