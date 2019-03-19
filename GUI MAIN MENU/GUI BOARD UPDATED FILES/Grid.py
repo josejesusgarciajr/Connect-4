@@ -41,7 +41,7 @@ class Grid:
             if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):
                 return False, player  # returning false will end the loop because player won
             else:
-                return True, None # returning true will let the game run
+                return True, None, row # returning true will let the game run
         else:
             notValidEntry = True                # if column is full
             while notValidEntry:
@@ -53,7 +53,7 @@ class Grid:
                     if self.checkVertical(player, column, row) or self.checkHorizontal(player, column, row) or self.checkDiagonals(player, column, row):     # if Not FULL (ADD TO COLUMN)
                         return False, player    # returning false will end the game
                     else:
-                        return True, None    # returning true will let the game run
+                        return True, None, row    # returning true will let the game run
                     notValidEntry = False
     
     def whosTurn(self, player1, player2):   # checks whos turn it is
