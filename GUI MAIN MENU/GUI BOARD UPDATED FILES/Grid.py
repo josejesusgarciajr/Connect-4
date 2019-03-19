@@ -58,13 +58,11 @@ class Grid:
     
     def whosTurn(self, player1, player2):   # checks whos turn it is
         if player1.state == True:           
-#             col = input("Which Column Player 1?")
-#             return (int(col) - 1), player1, player2
-            return 1
+            col = input("Which Column Player 1?")
+            return (int(col) - 1), player1, player2
         else:
-#             col = input("Which Column Player 2?")
-#             return (int(col) - 1), player2, player1
-            return 2
+            col = input("Which Column Player 2?")
+            return (int(col) - 1), player2, player1
         
     def columnNotFull(self, column):        # Checks if a given column is full
         if self.inRange(column):            # Checks if column is in range
