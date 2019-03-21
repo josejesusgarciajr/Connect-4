@@ -4,12 +4,14 @@ from tkinter.font import BOLD
 from PIL import Image, ImageTk
 import tkinter
 from Tools.scripts import highlight
+from Connect.GUI_Game_Board import GUI_Game_Board
 
 class GUI_Multiplayer:
     def __init__(self, window):
         self.window = window
         self.window.geometry('1100x750')
         self.window.title("Connect 4 User Input")
+        self.window.resizable(0, 0) #Don't allow resizing in the x or y direction
         self.window.config(bg="#1dace7")
 
         # Set background image
@@ -102,7 +104,9 @@ class GUI_Multiplayer:
         print("*****PLAY CONNECT 4*******")
         print("Player 1 info ", self.player1_name.get(), color_options[self.player1_colorvar.get() - 1])
         print("Player 2 info ", self.player2_name.get(), color_options[self.player2_colorvar.get() - 1])
-
+        color1 = color_options[self.player1_colorvar.get() - 1]
+        color2 = color_options[self.player2_colorvar.get() - 1]
+        board = GUI_Game_Board(self.player1_name.get(), self.player2_name.get(), color1, color2)
         # Hides the placeholder text in entry box on mouse click
 
     def clear_entry1(self, event):

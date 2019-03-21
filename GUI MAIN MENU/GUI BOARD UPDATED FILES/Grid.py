@@ -109,6 +109,7 @@ class Grid:
                 match += 1          # incement matches by one if match found
             if match == 4:      # if 4 consecutive matches, That player wins
                 print("VERTICAL WIN")
+                player.wins += 1 
                 return True
             else:                       # if not a consecutive match, then not a win
                 if self.matrix[column][checkUp] != player.color:
@@ -125,6 +126,7 @@ class Grid:
                     match += 1
                 if match == 4:          # if 4 matches found, return True for win
                     print("HORIZONTAL WIN")
+                    player.wins += 1 
                     return True
                 if self.matrix[checkUp][row] != player.color or checkUp == -1: # stops loop when no match is reached
                     break
@@ -137,6 +139,7 @@ class Grid:
                     match += 1
                 if match == 4:      # if the combined matches from the left add up to 4
                     print("HORIZONTAL WIN")
+                    player.wins += 1 
                     return True         # return True for win
                 if self.matrix[checkUp][row] != player.color:
                     break           # if no match, and match < 4, stop searching
@@ -154,6 +157,7 @@ class Grid:
                 if self.matrix[column + checkUp][row - checkUp] == player.color:
                     match += 1                      # if match, increment
                     if match == 4:              # if 4 matches, return true for the win
+                        player.wins += 1
                         return True
                 else:
                     break           # break loop because no match to player
@@ -166,6 +170,7 @@ class Grid:
                 if self.matrix[column - checkDown - 1][row + checkDown + 1] == player.color:
                     match +=1
                     if match == 4:
+                        player.wins += 1 
                         return True
                 else:
                     break       # break because no match
@@ -182,6 +187,7 @@ class Grid:
                 if self.matrix[column - checkUp][row - checkUp] == player.color:
                     match += 1
                     if match == 4:
+                        player.wins += 1
                         return True
                 else:
                     break       # break because not match
@@ -195,6 +201,7 @@ class Grid:
                 if self.matrix[column + checkDown + 1][row + checkDown + 1] == player.color:
                     match += 1
                     if match == 4:
+                        player.wins += 1
                         return True     # Return true for the win
                 else:
                     break           # break because no longer a match

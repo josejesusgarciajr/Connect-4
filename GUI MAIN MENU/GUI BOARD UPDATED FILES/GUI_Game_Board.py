@@ -61,8 +61,12 @@ class Token:
         
 class GUI_Game_Board:
     
-    def __init__(self):
-        self.window = Tk()
+    def __init__(self, player1_name, player2_name, player1_color, player2_color):
+        self.player1_name = player1_name
+        self.player2_name = player2_name
+        self.player1_color = player1_color
+        self.player2_color = player2_color
+        self.window = Toplevel()
         self.window.geometry('1100x750')
         self.window.title("Connect 4 Game")
         self.window.config(bg="white")
@@ -74,19 +78,17 @@ class GUI_Game_Board:
 
         self.make_board()
         self.create_triangles()
-
         # dictionary of key value pairs for triangle keys and their respective triangle objects
         # used to delete a triangle from the board if a column is full
         self.triangles = {"triangle1": self.triangle1, "triangle2": self.triangle2, "triangle3" : self.triangle3, 
                      "triangle4" : self.triangle4, "triangle5" : self.triangle5, "triangle6" : self.triangle6, 
                      "triangle7" : self.triangle7}
-
         self.start_game()
         self.window.mainloop()
         
 #    make board (image)
     def make_board(self):
-        self.image_path = "C:/Users/justi.JUSTINE-SURFACE/python_practice/Connect_4/Connect/board.png"
+        self.image_path = "board.png"
         self.load = Image.open(self.image_path)
         self.load = self.load.resize((1100, 750), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(self.load)
@@ -96,7 +98,7 @@ class GUI_Game_Board:
 #    creating triangle/buttons for column selection  
 #    when triangle is clicked, sends in the column number and player objects to the drop_token method
     def create_triangles(self):
-        triangle_gif = "C:/Users/justi.JUSTINE-SURFACE/python_practice/Connect_4/Connect/ezgif.com-resize.gif"
+        triangle_gif = "ezgif.com-resize.gif"
         origin_x = 215
         origin_y = 120
         self.triangle1 = ImageButton(self.canvas,bg="white", border="0", command= lambda : self.drop_token(0, self.player1, self.player2))
@@ -134,6 +136,18 @@ class GUI_Game_Board:
         self.triangle7.load(triangle_gif)
         origin_x+=100
     
+    def show_scoreboard(self):
+        self.top_score = tkinter.Frame(master=self.window, width = "275", height = "50", bg = self.window['bg'])
+        self.top_score.place(x=-50, y=10)
+
+        player1_score = self.player1.name.title() + "  " + str(self.player1.wins)
+        player2_score = self.player2.name.title() + "  " + str(self.player2.wins)
+        
+        player1_score_label = tkinter.Label(master = self.top_score, font = ("Helvetica", 18, BOLD), height=1, width=18, text=player1_score, bg = self.window['bg'])
+        player2_score_label = tkinter.Label(master = self.top_score, font = ("Helvetica", 18, BOLD), height=1, width=18, text=player2_score, bg = self.window['bg'])
+        player1_score_label.pack()
+        player2_score_label.pack()
+
 #   clears a triangle if the respective column is filled
     def clear_triangle(self, triangle_number):
         self.triangles["triangle"+str(triangle_number + 1)].destroy()
@@ -162,41 +176,67 @@ class GUI_Game_Board:
 #    game over, winner is found
 #    destroy the top banner and create a new one with winner name
         if active == False:
-            print("winner has been found!!!!!!")
             self.top.destroy()
-            self.player1.state = 0
-            self.player2.state = 0
-            self.update_top_banner(winner=winner)
+            self.update_top_banner(winner=winner, active=active)
            
 #    no winner detected, keep playing
         else:
             self.top.destroy()
-            self.update_top_banner(None)
+            self.update_top_banner(None, None)
 
     # starts the game
     def start_game(self):
-        name = raw_input("Player 1, plz enter your Name: ")
-        color_one = raw_input("Player 1, choose your color: ")
-        
+#         name = raw_input("Player 1, plz enter your Name: ")
+        name=self.player1_name
+#         color_one = raw_input("Player 1, choose your color: ")
+        color_one=self.player1_color
         self.player1 = Player(name, color_one, 0, True)
         
-        name2= raw_input("Player 2, plz enter your Name: ")
-        color_two = raw_input("Player 2, choose your color: ")
-        
+#         name2= raw_input("Player 2, plz enter your Name: ")
+#         color_two = raw_input("Player 2, choose your color: ")
+#         
+        name2 = self.player2_name
+        color_two=self.player2_color
+    
         self.player2 = Player(name2, color_two, 0, False)
         
         Matrix = [[0 for x in range(6)] for y in range(7)]
         self.game = Grid(self.player1, self.player2, Matrix)
-        self.update_top_banner(None)
-        
+        self.update_top_banner(None, None)
+        self.show_scoreboard()
+    
+    # new game after win
+    def show_new_game(self):
+        self.new_game = tkinter.Frame(master=self.window, width = "200", height = "50", bg = self.window['bg'])
+        self.new_game.place(x=970, y=20)
+        button = tkinter.Button(master=self.new_game, text="NEW GAME", font = ("Helvetica", 12, BOLD), height=2, width=10, bg="#61bffa", fg="white", command=self.start_new_game)
+        button.pack()
+    def start_new_game(self):
+        self.canvas.delete("all")
+        self.make_board()
+        self.create_triangles()
+        Matrix = [[0 for x in range(6)] for y in range(7)]
+        self.game = Grid(self.player1, self.player2, Matrix)
+        self.update_top_banner(None, None)
+        self.triangles = {"triangle1": self.triangle1, "triangle2": self.triangle2, "triangle3" : self.triangle3, 
+                     "triangle4" : self.triangle4, "triangle5" : self.triangle5, "triangle6" : self.triangle6, 
+                     "triangle7" : self.triangle7}
+        self.show_scoreboard()
     # changing top banner according to player turn
-    def update_top_banner(self, winner):
-        self.top = tkinter.Frame(master=self.window, width = "150", height = "50", bg = self.window['bg'])
+    def update_top_banner(self, winner, active):
+        print("active is " + str(active))
+        if active == False:
+            for i in range(7):
+                self.clear_triangle(i)
+                print("cleared !active is " + str(active))
+        self.top = tkinter.Frame(master=self.window, width = "1100", height = "50", bg = self.window['bg'])
         self.top.place(x=370, y=10)
         if winner != None:                
             label_text = winner.name + " has won!"
             player_turn_label = tkinter.Label(master = self.top, font = ("Helvetica", 25, BOLD), height=2, width=18, text = label_text.upper(), bg=self.window['bg'])
             player_turn_label.pack()
+            self.top_score.destroy()
+            self.show_scoreboard()
             
         elif winner == None:
             if self.player1.state == True:
@@ -212,7 +252,9 @@ class GUI_Game_Board:
     
             player_turn_label = tkinter.Label(master = self.top, font = ("Helvetica", 25, BOLD), height=2, width=18, text = label_text, bg=self.window['bg'])
             player_turn_label.pack()
+        self.show_new_game()
+
             
 
-game_board = GUI_Game_Board()
+# game_board = GUI_Game_Board()
 
