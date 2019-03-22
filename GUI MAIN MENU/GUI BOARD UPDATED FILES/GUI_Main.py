@@ -37,7 +37,6 @@ class GUI_Main:
         scoreboard_button.pack(pady = 20)
     
     def show_settings(self):
-        print("nikita stuff")
         self.next = GUI_Multiplayer(self.root)
         
 root = tkinter.Tk()

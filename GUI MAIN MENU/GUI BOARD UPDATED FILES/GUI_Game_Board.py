@@ -178,6 +178,12 @@ class GUI_Game_Board:
         if active == False:
             self.top.destroy()
             self.update_top_banner(winner=winner, active=active)
+            if self.player1.state:
+                self.player1.state = False
+                self.player2.state = True
+            else:
+                self.player1.state = True
+                self.player2.state = False
            
 #    no winner detected, keep playing
         else:
